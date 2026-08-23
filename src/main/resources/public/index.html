@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tic-Tac-Toe Online</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="card">
+        <h1>Tic-Tac-Toe Online</h1>
+        
+        <div id="lobbySection">
+            <input type="text" id="usernameInput" placeholder="Enter your nickname" maxlength="15">
+            <button id="btnPlay" onclick="searchMatch()">Search for a match</button>
+        </div>
+
+        <div id="statusMessage" class="status">Connecting to the server...</div>
+
+        <div id="gameSection" style="display: none;">
+            <div id="roleInfo" class="role-info"></div>
+            <div class="grid" id="board">
+                <div class="cell" onclick="cellClicked(0)" id="cell-0"></div>
+                <div class="cell" onclick="cellClicked(1)" id="cell-1"></div>
+                <div class="cell" onclick="cellClicked(2)" id="cell-2"></div>
+                <div class="cell" onclick="cellClicked(3)" id="cell-3"></div>
+                <div class="cell" onclick="cellClicked(4)" id="cell-4"></div>
+                <div class="cell" onclick="cellClicked(5)" id="cell-5"></div>
+                <div class="cell" onclick="cellClicked(6)" id="cell-6"></div>
+                <div class="cell" onclick="cellClicked(7)" id="cell-7"></div>
+                <div class="cell" onclick="cellClicked(8)" id="cell-8"></div>
+            </div>
+            <button id="btnRestart" onclick="resetToLobby()" style="display: none; margin-top: 15px;">Play again</button>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
