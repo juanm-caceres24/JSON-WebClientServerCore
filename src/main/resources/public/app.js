@@ -76,6 +76,15 @@ function searchMatch() {
     const name = usernameInput.value.trim() || "Player";
     ws.send(JSON.stringify({ command: "PLAY", content: "", sender: name }));
     document.getElementById("btnPlay").disabled = true;
+    document.getElementById("btnPlayAI").disabled = true;
+}
+
+function playAgainstMachine() {
+    const usernameInput = document.getElementById("usernameInput");
+    const name = usernameInput.value.trim() || "Player";
+    ws.send(JSON.stringify({ command: "PLAY_AI", content: "", sender: name }));
+    document.getElementById("btnPlay").disabled = true;
+    document.getElementById("btnPlayAI").disabled = true;
 }
 
 function cellClicked(index) {
@@ -113,10 +122,15 @@ function clearBoardUI() {
 }
 
 function resetToLobby() {
+    mySymbol = "";
+    myTurn = false;
+    clearSelectedPiece();
     document.getElementById("gameSection").style.display = "none";
     document.getElementById("lobbySection").style.display = "block";
     document.getElementById("btnPlay").disabled = false;
+    document.getElementById("btnPlayAI").disabled = false;
     document.getElementById("statusMessage").innerText = "Ready to search for another match.";
+    clearBoardUI();
 }
 
 window.onload = initWebSocket;

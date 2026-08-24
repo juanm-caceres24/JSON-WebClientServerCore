@@ -19,16 +19,19 @@ public class MainApp {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
 
-        System.out.print("Enter Web Port (default: 8080): ");
-        int port = 8080;
+        System.out.print("Enter Web Port (default: 8000): ");
+        int port = 8000;
         String portInput = scanner.nextLine();
         if (!portInput.trim().isEmpty()) {
             try {
                 port = Integer.parseInt(portInput.trim());
             } catch (NumberFormatException e) {
-                System.out.println("Invalid port. Using 8080.");
+                System.out.println("Invalid port. Using 8000.");
             }
         }
+        String predictionUrl = System.getProperty("tictactoe.ai.url",
+            System.getenv().getOrDefault("TICTACTOE_AI_URL", "http://127.0.0.1:8001/predict"));
+        System.out.println("Neural network API: " + predictionUrl);
         scanner.close();
 
         System.out.println("Use the followng URLs to connect to the server:");
@@ -36,7 +39,7 @@ public class MainApp {
         printNetworkInterfaces(port);
         printPublicIp(port);
 
-        TicTacToeLogic gameLogic = new TicTacToeLogic();
+        TicTacToeLogic gameLogic = new TicTacToeLogic(predictionUrl);
         WebServerCore webServer = new WebServerCore(port, gameLogic);
         webServer.start();
     }

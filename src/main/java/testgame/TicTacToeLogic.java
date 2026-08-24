@@ -15,6 +15,15 @@ import server.ServerListener;
 public class TicTacToeLogic implements ServerListener {
     private final Queue<ClientSession> waitingQueue = new ConcurrentLinkedQueue<>();
     private final Map<String, GameSession> playerMatches = new ConcurrentHashMap<>();
+    private final NeuralNetworkClient neuralNetworkClient;
+
+    public TicTacToeLogic() {
+        this("http://127.0.0.1:8001/predict");
+    }
+
+    public TicTacToeLogic(String predictionUrl) {
+        this.neuralNetworkClient = new NeuralNetworkClient(predictionUrl);
+    }
 
     @Override
     public void onClientConnected(ClientSession client) {
@@ -38,10 +47,19 @@ public class TicTacToeLogic implements ServerListener {
 
         if ("PLAY".equals(command)) {
             client.setUsername(packet.getSender());
+            removeCompletedMatch(client);
             if (!waitingQueue.contains(client)) {
                 waitingQueue.add(client);
                 client.sendPacket(new JsonPacket("SYSTEM", "Searching for an opponent...", "Server"));
                 checkMatchmaking();
+            }
+        } else if ("PLAY_AI".equals(command)) {
+            client.setUsername(packet.getSender());
+            removeCompletedMatch(client);
+            if (!playerMatches.containsKey(client.getId()) && !waitingQueue.contains(client)) {
+                GameSession game = new GameSession(client, neuralNetworkClient);
+                playerMatches.put(client.getId(), game);
+                new Thread(game, "tic-tac-toe-ai").start();
             }
         } else if ("MOVE".equals(command)) {
             GameSession session = playerMatches.get(client.getId());
@@ -51,6 +69,13 @@ public class TicTacToeLogic implements ServerListener {
                     session.processMove(client, cellIndex);
                 } catch (NumberFormatException ignored) {}
             }
+        }
+    }
+
+    private void removeCompletedMatch(ClientSession client) {
+        GameSession session = playerMatches.get(client.getId());
+        if (session != null && !session.isGameActive()) {
+            playerMatches.remove(client.getId(), session);
         }
     }
 

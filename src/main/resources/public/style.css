@@ -54,6 +54,10 @@ button {
     transition: background 0.2s;
 }
 
+#btnPlayAI {
+    margin-top: 10px;
+}
+
 button:hover {
     background: #2563eb;
 }
