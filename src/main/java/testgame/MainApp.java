@@ -19,7 +19,7 @@ public class MainApp {
     private static final int DEFAULT_PORT = 9000;
     private static final String DEFAULT_LOCALHOST = "127.0.0.1";
     private static final String TICTACTOE_AI_URL = "tictactoe.ai.url";
-    private static final String PREDICTION_URL_API = "http://127.0.0.1:8001/predict";
+    private static final String PREDICTION_URL_API = "http://127.0.0.1:9001/predict";
     private static final String PREDICTION_URL_NAME = "TICTACTOE_AI_URL";
 
     private static int port;
